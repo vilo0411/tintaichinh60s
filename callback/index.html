@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TikTok Connected</title>
+<link rel="icon" href="../logo.png"><link rel="stylesheet" href="../style.css"></head>
+<body>
+<header><div class="in"><img src="../logo.png" alt=""><a href="../">Tin Tài Chính 60 Giây</a></div></header>
+<main>
+<h1 id="t">Connecting TikTok…</h1>
+<p id="m" class="muted"></p>
+<div class="card" id="box" hidden>
+<p>Copy this authorization code back into the uploader tool:</p>
+<textarea id="code" readonly></textarea>
+<p><button id="copy">Copy code</button></p>
+</div>
+</main>
+<script>
+var q = new URLSearchParams(location.search);
+var code = q.get('code'), err = q.get('error');
+var t = document.getElementById('t'), m = document.getElementById('m');
+if (code) {
+  t.textContent = 'TikTok account connected';
+  document.getElementById('box').hidden = false;
+  document.getElementById('code').value = code;
+  document.getElementById('copy').onclick = function () {
+    var el = document.getElementById('code'); el.select();
+    (navigator.clipboard ? navigator.clipboard.writeText(el.value) : Promise.resolve(document.execCommand('copy')))
+      .then(function () { m.textContent = 'Copied.'; });
+  };
+} else if (err) {
+  t.textContent = 'Authorization failed';
+  m.textContent = err + (q.get('error_description') ? ': ' + q.get('error_description') : '');
+} else {
+  t.textContent = 'No authorization code';
+  m.textContent = 'Start the connection from the uploader tool.';
+}
+</script>
+</body></html>
